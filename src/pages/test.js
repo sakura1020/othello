@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import styles from './index.module.css';
+import { Direction } from 'readline';
+
 const directions = [
-  [1, 0],
   [1, 1],
+  [1, 0],
+  [1, -1],
   [0, 1],
+  [0, -1],
   [-1, 1],
   [-1, 0],
   [-1, -1],
-  [0, -1],
-  [1, -1],
 ];
 const Home = () => {
   const [turnColor, setTurnColor] = useState(1);
@@ -22,31 +24,18 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  const clickHandler = (x: number, y: number) => {
+  const clickHndeler = (x: number, y: number) => {
     console.log(x, y);
-    // var checkRun = 'True';
     const newBoard = structuredClone(board);
     for (const direction of directions) {
-      const memoryPosision = [];
-      // if (checkRun === 'False') {
-      //   break;
-      // }
       if (board[y + direction[0]][x + direction[1]] === 3 - turnColor) {
         for (let i = 1; i < 8; i++) {
           if (board[y + direction[0] * i][x + direction[1] * i] === 3 - turnColor) {
-            memoryPosision[memoryPosision.length] = [y + direction[0] * i, x + direction[1] * i];
-            console.log([y + direction[0] * i], [x + direction[1] * i]);
-            // console.log(memoryPosision);
             continue;
           } else if (board[y + direction[0] * i][x + direction[1] * i] === turnColor) {
             newBoard[y][x] = turnColor;
-            for (const posision of memoryPosision) {
-              newBoard[posision[0]][posision[1]] = turnColor;
-            }
             setTurnColor(3 - turnColor);
             setBoard(newBoard);
-            console.log(memoryPosision);
-            // var checkRun = 'False';
             break;
           } else {
             break;
@@ -60,7 +49,7 @@ const Home = () => {
       <div className={styles.boardStyle}>
         {board.map((row, y) =>
           row.map((color, x) => (
-            <div className={styles.cellStyle} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
+            <div className={styles.cellStyle} key={`${x}-${y}`} onClick={() => clickHndeler(x, y)}>
               {color !== 0 && (
                 <div
                   className={styles.stoneStyle}
@@ -74,4 +63,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;
