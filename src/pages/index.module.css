@@ -28,8 +28,9 @@
   display: flex;
   width: 56px;
   height: 56px;
-  color: #fff;
   background-color: #fff;
   border: solid;
+  border-color: #000;
+  border-width: 0;
   border-radius: 50%;
 }
