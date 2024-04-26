@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styles from './index.module.css';
 import { count } from 'console';
+const score_white = [0];
+const score_black = [0];
 const directions = [
   [1, 0],
   [1, 1],
@@ -61,8 +63,8 @@ const Home = () => {
           }
         }
       }
-      const score_black = [0];
-      const score_white = [0];
+      score_white[0] = 0;
+      score_black[0] = 0;
       for (const rows of newBoard) {
         for (let i = 0; i < 8; i++) {
           if (rows[i] !== 0) rows[i] === 1 ? score_black[0]++ : score_white[0]++;
@@ -73,6 +75,10 @@ const Home = () => {
   };
   return (
     <div className={styles.container}>
+      <div>
+        white:{score_black}black:{score_white}
+      </div>
+      <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
       <div className={styles.boardStyle}>
         {board.map((row, y) =>
           row.map((color, x) => (
