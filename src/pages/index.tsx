@@ -27,13 +27,33 @@ const Home = () => {
   ]);
   const clickHandler = (x: number, y: number) => {
     if (board[y][x] !== 1 && board[y][x] !== 2) {
-      // var checkRun = 'True';
       const newBoard = structuredClone(board);
+      for (const direction of newBoard) {
+        for (let i = 0; i < 8; i++) {
+          for (const direction of directions) {
+            if (
+              board[y + direction[0]] !== undefined &&
+              board[y + direction[0]][x + direction[1]] === 3 - turnColor
+            ) {
+              for (let i = 1; i < 8; i++) {
+                if (
+                  board[y + direction[0] * i] !== undefined &&
+                  board[y + direction[0] * i][x + direction[1] * i] === 3 - turnColor
+                )
+                  continue;
+                else if (
+                  board[y + direction[0] * i] !== undefined &&
+                  board[y + direction[0] * i][x + direction[1] * i] === turnColor
+                )
+                  board[y][x] === 3;
+                setBoard(newBoard);
+              }
+            }
+          }
+        }
+      }
       for (const direction of directions) {
         const memoryPosision = [];
-        // if (checkRun === 'False') {
-        //   break;
-        // }
         if (
           board[y + direction[0]] !== undefined &&
           board[y + direction[0]][x + direction[1]] === 3 - turnColor
@@ -76,17 +96,23 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div>
-        white:{score_black}black:{score_white}
+        white:{score_black[0]}black:{score_white[0]}
       </div>
       <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
       <div className={styles.boardStyle}>
         {board.map((row, y) =>
           row.map((color, x) => (
             <div className={styles.cellStyle} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
-              {color !== 0 && (
+              {color !== 0 && color !== 3 && (
                 <div
                   className={styles.stoneStyle}
                   style={{ background: color === 1 ? '#000' : '#fff' }}
+                />
+              )}
+              {color === 3 && (
+                <div
+                  className={styles.artstyle}
+                  style={{ background: color === 3 ? '#79cff7' : '' }}
                 />
               )}
             </div>
