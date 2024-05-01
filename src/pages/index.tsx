@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './index.module.css';
-const score_white = [0];
-const score_black = [0];
+const score_white = [2];
+const score_black = [2];
 const directions = [
   [1, 0],
   [1, 1],
