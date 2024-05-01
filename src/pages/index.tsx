@@ -12,9 +12,8 @@ const directions = [
   [0, -1],
   [1, -1],
 ];
-const judge = (y, x, board, turnColor) => {
+const judge = (y: number, x: number, board: number[][], turnColor: number) => {
   if (board[y][x] !== 1 && board[y][x] !== 2) {
-    const newBoard = structuredClone(board);
     for (const direction of directions) {
       if (
         board[y + direction[0]] !== undefined &&
