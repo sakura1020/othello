@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import styles from './index.module.css';
 const score_white = [2];
 const score_black = [2];
@@ -12,29 +12,55 @@ const directions = [
   [0, -1],
   [1, -1],
 ];
+const memoryposition = [];
 const judge = (y: number, x: number, board: number[][], turnColor: number) => {
+  memoryposition.length = 0;
   if (board[y][x] !== 1 && board[y][x] !== 2) {
+    let preTrue = false;
     for (const direction of directions) {
+      const prememoryPosition = [];
       if (
         board[y + direction[0]] !== undefined &&
         board[y + direction[0]][x + direction[1]] === 3 - turnColor
       ) {
-        for (let i = 1; i < 8; i++) {
+        for (let i = 1; i < 9; i++) {
           if (
             board[y + direction[0] * i] !== undefined &&
             board[y + direction[0] * i][x + direction[1] * i] === 3 - turnColor
-          )
+          ) {
+            prememoryPosition.push([y + direction[0] * i, x + direction[1] * i]);
             continue;
-          else if (
+          } else if (
             board[y + direction[0] * i] !== undefined &&
             board[y + direction[0] * i][x + direction[1] * i] === turnColor
-          )
-            return true;
+          ) {
+            for (const mpm of prememoryPosition) {
+              memoryposition.push(mpm);
+            }
+            preTrue = true;
+            break;
+          } else {
+            break;
+          }
         }
       }
     }
+    if (preTrue) {
+      return true;
+    }
   }
 };
+const invert = (board, turnColor) => {
+  for (const mp of memoryposition) {
+    board[mp[0]][mp[1]] = turnColor;
+  }
+  return board;
+};
+// const suggest = (y: number, x: number, board: number[][], turnColor: number) =>{
+// for(let row=0 ; row < 8;row++)
+//   for(let element=0 ; element < 8 ; element++)
+//       if ()
+// }
 const Home = () => {
   const [turnColor, setTurnColor] = useState(1);
   const [board, setBoard] = useState([
@@ -48,62 +74,24 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const clickHandler = (x: number, y: number) => {
-    if (board[y][x] !== 1 && board[y][x] !== 2) {
-      const newBoard = structuredClone(board);
-      for (let row = 0; row < 8; row++) {
-        for (let element = 0; element < 8; element++) {
-          if (newBoard[row][element] === 3) {
-            newBoard[row][element] = 0;
+    const newBoard = structuredClone(board);
+
+    if (judge(y, x, newBoard, turnColor)) {
+      console.log(memoryposition);
+      newBoard[y][x] = turnColor;
+      const newBoard2 = invert(newBoard, turnColor);
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          if (newBoard2[i][j] === 3) {
+            newBoard2[i][j] = 0;
+          }
+          if (judge(i, j, newBoard2, 3 - turnColor)) {
+            newBoard2[i][j] = 3;
           }
         }
       }
-      for (const direction of directions) {
-        const memoryPosision = [];
-        if (
-          board[y + direction[0]] !== undefined &&
-          board[y + direction[0]][x + direction[1]] === 3 - turnColor
-        ) {
-          for (let i = 1; i < 8; i++) {
-            if (
-              board[y + direction[0] * i] !== undefined &&
-              board[y + direction[0] * i][x + direction[1] * i] === 3 - turnColor
-            ) {
-              memoryPosision[memoryPosision.length] = [y + direction[0] * i, x + direction[1] * i];
-              continue;
-            } else if (
-              board[y + direction[0] * i] !== undefined &&
-              board[y + direction[0] * i][x + direction[1] * i] === turnColor
-            ) {
-              newBoard[y][x] = turnColor;
-              for (const posision of memoryPosision) {
-                newBoard[posision[0]][posision[1]] = turnColor;
-              }
-              setTurnColor(3 - turnColor);
-              console.log(turnColor);
-              // setBoard(newBoard);
-              break;
-            } else {
-              break;
-            }
-          }
-        }
-      }
-      for (let row = 0; row < 8; row++) {
-        for (let element = 0; element < 8; element++) {
-          if (judge(row, element, newBoard, 3 - turnColor)) {
-            newBoard[row][element] = 3;
-          }
-        }
-      }
-      setBoard(newBoard);
-      score_white[0] = 0;
-      score_black[0] = 0;
-      for (const rows of newBoard) {
-        for (let i = 0; i < 8; i++) {
-          if (rows[i] !== 0 && rows[i] !== 3) rows[i] === 1 ? score_black[0]++ : score_white[0]++;
-        }
-      }
-      console.log(score_black, score_white);
+      setTurnColor(3 - turnColor);
+      setBoard(newBoard2);
     }
   };
   return (
