@@ -40,10 +40,10 @@ const Home = () => {
   const [board, setBoard] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 1, 2, 3, 0, 0],
+    [0, 0, 3, 2, 1, 0, 0, 0],
+    [0, 0, 0, 3, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
@@ -79,6 +79,7 @@ const Home = () => {
                 newBoard[posision[0]][posision[1]] = turnColor;
               }
               setTurnColor(3 - turnColor);
+              console.log(turnColor);
               // setBoard(newBoard);
               break;
             } else {
@@ -99,7 +100,7 @@ const Home = () => {
       score_black[0] = 0;
       for (const rows of newBoard) {
         for (let i = 0; i < 8; i++) {
-          if (rows[i] !== 0) rows[i] === 1 ? score_black[0]++ : score_white[0]++;
+          if (rows[i] !== 0 && rows[i] !== 3) rows[i] === 1 ? score_black[0]++ : score_white[0]++;
         }
       }
       console.log(score_black, score_white);
@@ -108,7 +109,7 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div>
-        white:{score_black[0]}black:{score_white[0]}
+        black:{score_black[0]}white:{score_white[0]}
       </div>
       <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
       <div className={styles.boardStyle}>
