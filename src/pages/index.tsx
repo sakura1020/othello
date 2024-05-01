@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styles from './index.module.css';
-import { count } from 'console';
 const score_white = [0];
 const score_black = [0];
 const directions = [
@@ -13,6 +12,30 @@ const directions = [
   [0, -1],
   [1, -1],
 ];
+const judge = (y, x, board, turnColor) => {
+  if (board[y][x] !== 1 && board[y][x] !== 2) {
+    const newBoard = structuredClone(board);
+    for (const direction of directions) {
+      if (
+        board[y + direction[0]] !== undefined &&
+        board[y + direction[0]][x + direction[1]] === 3 - turnColor
+      ) {
+        for (let i = 1; i < 8; i++) {
+          if (
+            board[y + direction[0] * i] !== undefined &&
+            board[y + direction[0] * i][x + direction[1] * i] === 3 - turnColor
+          )
+            continue;
+          else if (
+            board[y + direction[0] * i] !== undefined &&
+            board[y + direction[0] * i][x + direction[1] * i] === turnColor
+          )
+            return true;
+        }
+      }
+    }
+  }
+};
 const Home = () => {
   const [turnColor, setTurnColor] = useState(1);
   const [board, setBoard] = useState([
@@ -28,27 +51,10 @@ const Home = () => {
   const clickHandler = (x: number, y: number) => {
     if (board[y][x] !== 1 && board[y][x] !== 2) {
       const newBoard = structuredClone(board);
-      for (const direction of newBoard) {
-        for (let i = 0; i < 8; i++) {
-          for (const direction of directions) {
-            if (
-              board[y + direction[0]] !== undefined &&
-              board[y + direction[0]][x + direction[1]] === 3 - turnColor
-            ) {
-              for (let i = 1; i < 8; i++) {
-                if (
-                  board[y + direction[0] * i] !== undefined &&
-                  board[y + direction[0] * i][x + direction[1] * i] === 3 - turnColor
-                )
-                  continue;
-                else if (
-                  board[y + direction[0] * i] !== undefined &&
-                  board[y + direction[0] * i][x + direction[1] * i] === turnColor
-                )
-                  board[y][x] === 3;
-                setBoard(newBoard);
-              }
-            }
+      for (let row = 0; row < 8; row++) {
+        for (let element = 0; element < 8; element++) {
+          if (newBoard[row][element] === 3) {
+            newBoard[row][element] = 0;
           }
         }
       }
@@ -74,8 +80,7 @@ const Home = () => {
                 newBoard[posision[0]][posision[1]] = turnColor;
               }
               setTurnColor(3 - turnColor);
-              setBoard(newBoard);
-              // var checkRun = 'False';
+              // setBoard(newBoard);
               break;
             } else {
               break;
@@ -83,6 +88,14 @@ const Home = () => {
           }
         }
       }
+      for (let row = 0; row < 8; row++) {
+        for (let element = 0; element < 8; element++) {
+          if (judge(row, element, newBoard, 3 - turnColor)) {
+            newBoard[row][element] = 3;
+          }
+        }
+      }
+      setBoard(newBoard);
       score_white[0] = 0;
       score_black[0] = 0;
       for (const rows of newBoard) {
