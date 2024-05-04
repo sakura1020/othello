@@ -1,7 +1,7 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import styles from './index.module.css';
-const score_white = [2];
-const score_black = [2];
+//const score_white = [2];
+//const score_black = [2];
 const directions = [
   [1, 0],
   [1, 1],
@@ -12,7 +12,7 @@ const directions = [
   [0, -1],
   [1, -1],
 ];
-const memoryposition = [];
+const memoryposition: number[] = [];
 const judge = (y: number, x: number, board: number[][], turnColor: number) => {
   memoryposition.length = 0;
   if (board[y][x] !== 1 && board[y][x] !== 2) {
@@ -50,7 +50,7 @@ const judge = (y: number, x: number, board: number[][], turnColor: number) => {
     }
   }
 };
-const invert = (board, turnColor) => {
+const invert = (board: number, turnColor: number) => {
   for (const mp of memoryposition) {
     board[mp[0]][mp[1]] = turnColor;
   }
@@ -74,12 +74,12 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const clickHandler = (x: number, y: number) => {
-    const newBoard = structuredClone(board);
+    const newBoard: number[][] = structuredClone(board);
 
     if (judge(y, x, newBoard, turnColor)) {
-      console.log(memoryposition);
+      //console.log(memoryposition);
       newBoard[y][x] = turnColor;
-      const newBoard2 = invert(newBoard, turnColor);
+      const newBoard2: number[][] = invert(newBoard, turnColor);
       for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
           if (newBoard2[i][j] === 3) {
@@ -94,10 +94,15 @@ const Home = () => {
       setBoard(newBoard2);
     }
   };
+  const black = board.flat().filter((num) => num === 1);
+  const white = board.flat().filter((num) => num === 2);
+  //console.log(black);
+  // console.log(white);
+
   return (
     <div className={styles.container}>
       <div>
-        black:{score_black[0]}white:{score_white[0]}
+        black:{black.length}white:{white.length}
       </div>
       <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
       <div className={styles.boardStyle}>
