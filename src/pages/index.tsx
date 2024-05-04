@@ -50,7 +50,7 @@ const judge = (y: number, x: number, board: number[][], turnColor: number) => {
     }
   }
 };
-const invert = (board: number, turnColor: number) => {
+const invert = (board: number[][], turnColor: number) => {
   for (const mp of memoryposition) {
     board[mp[0]][mp[1]] = turnColor;
   }
@@ -64,14 +64,14 @@ const invert = (board: number, turnColor: number) => {
 const Home = () => {
   const [turnColor, setTurnColor] = useState(1);
   const [board, setBoard] = useState([
+    [2, 1, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 3, 0, 0, 0],
-    [0, 0, 0, 1, 2, 3, 0, 0],
-    [0, 0, 3, 2, 1, 0, 0, 0],
-    [0, 0, 0, 3, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0],
+    [2, 1, 0, 0, 0, 0, 0, 0],
   ]);
   const clickHandler = (x: number, y: number) => {
     const newBoard: number[][] = structuredClone(board);
@@ -79,6 +79,9 @@ const Home = () => {
     if (judge(y, x, newBoard, turnColor)) {
       //console.log(memoryposition);
       newBoard[y][x] = turnColor;
+      setTurnColor(3 - turnColor);
+      console.log(turnColor);
+
       const newBoard2: number[][] = invert(newBoard, turnColor);
       for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
@@ -90,8 +93,19 @@ const Home = () => {
           }
         }
       }
+    }
+    setBoard(newBoard);
+    const blue = board.flat().filter((num) => num === 3);
+    if (blue.length === 0) {
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          if (judge(i, j, newBoard, 3 - turnColor)) {
+            newBoard[i][j] = 3;
+          }
+        }
+      }
       setTurnColor(3 - turnColor);
-      setBoard(newBoard2);
+      setBoard(newBoard);
     }
   };
   const black = board.flat().filter((num) => num === 1);
