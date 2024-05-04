@@ -64,14 +64,14 @@ const invert = (board: number[][], turnColor: number) => {
 const Home = () => {
   const [turnColor, setTurnColor] = useState(1);
   const [board, setBoard] = useState([
-    [2, 1, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 1, 2, 3, 0, 0],
+    [0, 0, 3, 2, 1, 0, 0, 0],
+    [0, 0, 0, 3, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0],
-    [2, 1, 0, 0, 0, 0, 0, 0],
   ]);
   const clickHandler = (x: number, y: number) => {
     const newBoard: number[][] = structuredClone(board);
@@ -110,15 +110,12 @@ const Home = () => {
   };
   const black = board.flat().filter((num) => num === 1);
   const white = board.flat().filter((num) => num === 2);
+  const blue = board.flat().filter((num) => num === 3);
   //console.log(black);
   // console.log(white);
 
   return (
     <div className={styles.container}>
-      <div>
-        black:{black.length}white:{white.length}
-      </div>
-      <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
       <div className={styles.boardStyle}>
         {board.map((row, y) =>
           row.map((color, x) => (
@@ -138,6 +135,13 @@ const Home = () => {
             </div>
           )),
         )}
+      </div>
+      <div className={styles.scoreBoard}>
+        <div>
+          black:{black.length}white:{white.length}
+        </div>
+        <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
+        <div>{blue.length === 0 ? 'pass(click)' : ''}</div>
       </div>
     </div>
   );

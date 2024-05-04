@@ -9,9 +9,18 @@
 }
 
 .boardStyle {
+  position: absolute;
   width: 640px;
   height: 640px;
   background-color: darkgreen;
+}
+
+.scoreBoard {
+  top: 160px;
+  left: 1000px;
+  width: 1000px;
+  height: 300px;
+  background-color: rgb(187 198 201 / 0%);
 }
 
 .cellStyle {
