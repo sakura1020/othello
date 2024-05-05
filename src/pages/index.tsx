@@ -12,6 +12,8 @@ const directions = [
   [0, -1],
   [1, -1],
 ];
+
+const passCount = { 1: 0, 2: 0 };
 const memoryposition: number[] = [];
 const judge = (y: number, x: number, board: number[][], turnColor: number) => {
   memoryposition.length = 0;
@@ -64,12 +66,12 @@ const invert = (board: number[][], turnColor: number) => {
 const Home = () => {
   const [turnColor, setTurnColor] = useState(1);
   const [board, setBoard] = useState([
+    [1, 2, 3, 0, 0, 0, 0, 0],
+    [2, 0, 0, 0, 0, 0, 0, 0],
+    [3, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 3, 0, 0, 0],
-    [0, 0, 0, 1, 2, 3, 0, 0],
-    [0, 0, 3, 2, 1, 0, 0, 0],
-    [0, 0, 0, 3, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
@@ -95,7 +97,7 @@ const Home = () => {
       }
     }
     setBoard(newBoard);
-    const blue = board.flat().filter((num) => num === 3);
+    const blue = newBoard.flat().filter((num) => num === 3);
     if (blue.length === 0) {
       for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
@@ -108,9 +110,9 @@ const Home = () => {
       setBoard(newBoard);
     }
   };
-  const black = board.flat().filter((num) => num === 1);
-  const white = board.flat().filter((num) => num === 2);
-  const blue = board.flat().filter((num) => num === 3);
+  const black_score = board.flat().filter((num) => num === 1);
+  const white_score = board.flat().filter((num) => num === 2);
+  const blue_score = board.flat().filter((num) => num === 3);
   //console.log(black);
   // console.log(white);
 
@@ -138,10 +140,10 @@ const Home = () => {
       </div>
       <div className={styles.scoreBoard}>
         <div>
-          black:{black.length}white:{white.length}
+          black:{black_score.length}white:{white_score.length}
         </div>
         <div>{turnColor === 1 ? 'turn of black' : 'turn of white'}</div>
-        <div>{blue.length === 0 ? 'pass(click)' : ''}</div>
+        <div>{blue_score.length === 0 ? 'pass(click)' : ''}</div>
       </div>
     </div>
   );
